@@ -1,21 +1,32 @@
 <template>
-  <div>{{ title }}</div>
+  <div class="container">
+    <page-login v-if="!isLoggedIn"></page-login>
+    <page-todo v-else></page-todo>
+  </div>
 </template>
 
 <script>
+import PageLogin from "@/views/PageLogin";
+import PageTodo from "@/views/PageTodo";
 
 export default {
   name: 'App',
+  components: {
+    PageLogin,
+    PageTodo
+  },
   data(){
     return{
-      title: "Hello, how are you"
+      isLoggedIn: false
     }
   }
 }
 </script>
 
 <style lang="scss">
-body{
-  background: red;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 </style>
