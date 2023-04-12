@@ -9,7 +9,3 @@ export const setItem = (key, value) => {
     console.log(err);
   }
 };
-
-export const removeItem = (key) => {
-  localStorage.removeItem(key);
-};

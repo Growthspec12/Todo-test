@@ -5,8 +5,11 @@
       <div class="login__body">
         <p class="login__heading">description</p>
         <form class="login__form form" @submit.prevent="register">
-          <input class="form__input" :class="{'form__input_error': !isUsernameCorrect}" type="text" placeholder="Username" v-model="inputName">
-          <input class="form__input" :class="{'form__input_error': !isPhoneCorrect}" type="text" placeholder="Phone Number" v-model="inputPhone">
+          <input class="form__input" :class="{'form__input_error': !isUsernameCorrect}" type="text" placeholder="Username" v-model="inputName" @input="resetError">
+          <input class="form__input" :class="{'form__input_error': !isPhoneCorrect}" type="text" placeholder="Phone Number" v-model="inputPhone" @input="resetError">
+          <div class="form__error">
+            <div v-show="!!error" class="form__error_message">{{error}}</div>
+          </div>
           <button class="form__button" type="submit">Register</button>
         </form>
       </div>
@@ -25,7 +28,8 @@ export default {
       inputName: "",
       inputPhone: "",
       isUsernameCorrect: true,
-      isPhoneCorrect: true
+      isPhoneCorrect: true,
+      error: ""
     }
   },
   watch: {
@@ -53,15 +57,18 @@ export default {
       }
       const currentUser = this.users.find(user => user.username === this.inputName)
       if (!currentUser){
-        console.log("User not found");
+        this.error = "User not found"
         return;
       }
       if (currentUser.phone !== this.inputPhone){
-        console.log("Phone are wrong");
+        this.error = "Phone are wrong"
         return;
       }
       this.$emit("login-success", currentUser, this.users)
       this.$router.push({name: "todo"})
+    },
+    resetError() {
+      this.error = "";
     }
   },
   created(){

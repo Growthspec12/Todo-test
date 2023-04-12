@@ -40,6 +40,15 @@ body {
     }
   }
 
+  &__error {
+    height: 20px;
+    margin: 0 auto 10px;
+
+    &_message{
+      color: $red;
+    }
+  }
+
   &__button{
     color: $white;
     background-color: $green;

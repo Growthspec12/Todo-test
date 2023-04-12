@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <header class="header">
+    <header class="header ma-xl-1">
       <nav class="navbar">
         <h1 class="navbar__heading">{{ user.name }}</h1>
         <ul class="navbar__list">
@@ -74,6 +74,7 @@
               <v-list-item-action>
                 <v-checkbox
                   :input-value="todo.completed"
+                  @click="changeStatus(todo.id)"
                   color="primary"
                 ></v-checkbox>
               </v-list-item-action>
@@ -107,7 +108,7 @@
     <div class="create-todo">
       <div class="wrapper">
         <form class="form" @submit.prevent="addTodo">
-          <input type="text" class="form__input" placeholder="Enter user ID" v-model="userIdInput">
+          <input type="number" class="form__input" placeholder="Enter user ID" v-model="userIdInput">
           <input type="text" class="form__input" placeholder="Enter todo title" v-model="todoTitleInput">
           <button type="submit" class="form__button">Add todo</button>
         </form>
@@ -162,7 +163,7 @@ export default {
         let userFilter = false;
         let inputMatch = false;
 
-        if (this.selectedStatusOptions.length === 0 || this.selectedStatusOptions.includes('Selected') && todo.completed || this.selectedStatusOptions.includes('Unselected') && !todo.completed || this.selectedStatusOptions.includes('Favorites') && todo.favorite) {
+        if (this.selectedStatusOptions.length === 0 || this.selectedStatusOptions.includes('Selected') && todo.completed || this.selectedStatusOptions.includes('Unselected') && !todo.completed || this.selectedStatusOptions.includes('Favorites') && todo.isFavorite) {
           statusFilter = true;
         }
 
@@ -187,6 +188,12 @@ export default {
     },
     titleInput(){
       this.filteredTodo = this.filterTodo
+    },
+    allTodo: {
+      handler(){
+        this.filteredTodo = this.filterTodo
+      },
+      deep: true
     }
   },
   methods: {
@@ -231,6 +238,8 @@ export default {
             completed: false,
             isFavorite: false
           })
+          const isOld = this.idOptions.some(id => id === Number(this.userIdInput));
+          !isOld && this.idOptions.push(Number(this.userIdInput));
           this.userIdInput = ""
           this.todoTitleInput = ""
         }
@@ -243,7 +252,11 @@ export default {
       favorites.push(todoId);
       setItem("favorites", favorites)
       const todo = this.allTodo.find(el => el.id === todoId)
-      todo.isFavorite = true
+      todo.isFavorite = !todo.isFavorite
+    },
+    changeStatus(todoId){
+      const todo = this.allTodo.find(el => el.id === todoId)
+      todo.completed = !todo.completed
     }
   },
   created(){
@@ -257,6 +270,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button,
+input[type='number'] {
+  -webkit-appearance: none;
+  margin: 0;
+  -moz-appearance: textfield !important;
+}
 .form__input{
   margin-bottom: 5px;
 }
@@ -266,7 +286,6 @@ export default {
 }
 .v-list-item{
   width: 100%;
-  //max-width: 500px;
   &__title{
     margin-left: 10px;
   }
