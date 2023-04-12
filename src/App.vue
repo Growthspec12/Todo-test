@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <router-view @login-success="onLoginSuccess" :user="userData"></router-view>
+  <div class="wrapper">
+    <router-view @login-success="onLoginSuccess" :user="userData" :users="allUsers"></router-view>
   </div>
 </template>
 
@@ -12,12 +12,14 @@ export default {
   name: 'App',
   data(){
     return{
-      userData: {}
+      userData: {},
+      allUsers: []
     }
   },
   methods: {
-    onLoginSuccess(user){
+    onLoginSuccess(user, users){
       this.userData = user
+      this.allUsers = users
       setItem("isLoggedIn", true)
     }
   },

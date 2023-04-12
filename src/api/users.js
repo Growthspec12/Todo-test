@@ -1,3 +1,4 @@
+import { URL } from "@/api/url";
 export const getUsers = () => {
-  return fetch("https://jsonplaceholder.typicode.com/users")
+  return fetch(`${URL}/users`)
 }

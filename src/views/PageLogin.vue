@@ -60,7 +60,7 @@ export default {
         console.log("Phone are wrong");
         return;
       }
-      this.$emit("login-success", currentUser)
+      this.$emit("login-success", currentUser, this.users)
       this.$router.push({name: "todo"})
     }
   },
