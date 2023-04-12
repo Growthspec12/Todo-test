@@ -19,7 +19,6 @@ import { getUsers } from "@/api/users";
 
 export default {
   name: "PageLogin",
-  emits: ["login-success"],
   data(){
     return {
       users: [],
@@ -62,6 +61,7 @@ export default {
         return;
       }
       this.$emit("login-success", currentUser)
+      this.$router.push({name: "todo"})
     }
   },
   created(){

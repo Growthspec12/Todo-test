@@ -1,31 +1,28 @@
 <template>
   <div class="container">
-    <page-login v-if="!isLoggedIn" @login-success="onLoginSuccess"></page-login>
-    <page-todo v-else :user="userData"></page-todo>
+    <router-view @login-success="onLoginSuccess" :user="userData"></router-view>
   </div>
 </template>
 
 <script>
-import PageLogin from "@/views/PageLogin";
-import PageTodo from "@/views/PageTodo";
+
+import { setItem } from "@/helper/storage";
 
 export default {
   name: 'App',
-  components: {
-    PageLogin,
-    PageTodo
-  },
   data(){
     return{
-      isLoggedIn: false,
       userData: {}
     }
   },
   methods: {
     onLoginSuccess(user){
       this.userData = user
-      this.isLoggedIn = true
+      setItem("isLoggedIn", true)
     }
+  },
+  created(){
+    setItem("isLoggedIn", false)
   }
 }
 </script>
