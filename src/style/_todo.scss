@@ -25,7 +25,8 @@
   }
 
   &__list{
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(100px, 150px) minmax(130px, 170px) minmax(100px, 150px) minmax(100px, 150px);
   }
 
   &__li{
@@ -66,4 +67,13 @@
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+@media (max-width: 660px){
+  .navbar__list{
+    grid-template-columns: minmax(100px, 150px) minmax(100px, 150px);
+  }
+  .form__input_item{
+    width: 100px;
+  }
 }

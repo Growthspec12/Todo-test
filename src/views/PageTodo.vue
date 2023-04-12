@@ -63,10 +63,7 @@
       </div>
     </div>
     <div class="todos">
-      <v-card
-        max-width="600"
-        class="mx-auto"
-      >
+      <v-card>
         <v-list
           subheader
           two-line
@@ -263,7 +260,13 @@ export default {
 .form__input{
   margin-bottom: 5px;
 }
+.v-card{
+  width: 100%;
+  max-width: 650px;
+}
 .v-list-item{
+  width: 100%;
+  //max-width: 500px;
   &__title{
     margin-left: 10px;
   }
