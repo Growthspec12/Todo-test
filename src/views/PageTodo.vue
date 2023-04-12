@@ -1,6 +1,17 @@
 <template>
-  <app-dropdown :options="options"></app-dropdown>
-
+  <div class="page-container">
+    <header class="header">
+      <nav class="navbar">
+        <h1 class="navbar__heading">{{ user.name }}</h1>
+        <ul class="navbar__list">
+          <li class="navbar__li">{{ user.address.city }}</li>
+          <li class="navbar__li">{{ user.phone }}</li>
+          <li class="navbar__li">{{ user.company.name }}</li>
+          <li class="navbar__li">{{ user.email }}</li>
+        </ul>
+      </nav>
+    </header>
+  </div>
 </template>
 
 <script>
@@ -18,12 +29,11 @@ export default {
   },
   data(){
     return {
-      options: ["All", "Completed", "Uncompleted", "Favorites"]
     }
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 </style>
