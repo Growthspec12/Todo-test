@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <page-login v-if="!isLoggedIn"></page-login>
-    <page-todo v-else></page-todo>
+    <page-login v-if="!isLoggedIn" @login-success="onLoginSuccess"></page-login>
+    <page-todo v-else :user="userData"></page-todo>
   </div>
 </template>
 
@@ -17,7 +17,14 @@ export default {
   },
   data(){
     return{
-      isLoggedIn: false
+      isLoggedIn: false,
+      userData: {}
+    }
+  },
+  methods: {
+    onLoginSuccess(user){
+      this.userData = user
+      this.isLoggedIn = true
     }
   }
 }

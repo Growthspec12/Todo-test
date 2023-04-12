@@ -1,11 +1,26 @@
 <template>
-  <h2>PageTodo</h2>
+  <app-dropdown :options="options"></app-dropdown>
 
 </template>
 
 <script>
+import AppDropdown from "@/components/AppDropdown";
 export default {
-  name: "PageTodo"
+  name: "PageTodo",
+  props: {
+    user: {
+      type: Object,
+      required: true
+    }
+  },
+  components: {
+    AppDropdown
+  },
+  data(){
+    return {
+      options: ["All", "Completed", "Uncompleted", "Favorites"]
+    }
+  }
 }
 </script>
 
