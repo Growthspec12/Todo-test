@@ -85,6 +85,22 @@
                 <v-list-item-title>User ID: {{ todo.userId }}</v-list-item-title>
                 <v-list-item-subtitle>{{ todo.title }}</v-list-item-subtitle>
               </v-list-item-content>
+              <v-list-item-action @click="addToFavorites(todo.id)">
+                <v-icon
+                  v-if="!todo.isFavorite"
+                  color="grey lighten-1"
+                >
+                  mdi-star-outline
+                </v-icon>
+
+                <v-icon
+                  v-else
+                  color="yellow darken-3"
+                >
+                  mdi-star
+                </v-icon>
+
+              </v-list-item-action>
             </v-list-item>
           </v-list-item-group>
         </v-list>
@@ -105,6 +121,7 @@
 
 <script>
 import {createTodo, getTodos} from "@/api/todo";
+import {getItem, setItem} from "@/helper/storage";
 
 export default {
   name: "PageTodo",
@@ -178,10 +195,11 @@ export default {
   methods: {
     async initTodo(){
       try {
+        const favorites = getItem("favorites")
         const response = await getTodos();
         this.allTodo = await response.json();
         this.allTodo = this.allTodo.map(todo => {
-          return {...todo, isFavorite: false}
+          return {...todo, isFavorite: favorites.includes(todo.id)}
         })
         this.filteredTodo = this.allTodo
       } catch {
@@ -222,9 +240,19 @@ export default {
       } catch {
         console.log("Can't create todo")
       }
+    },
+    addToFavorites(todoId){
+      const favorites = getItem("favorites")
+      favorites.push(todoId);
+      setItem("favorites", favorites)
+      const todo = this.allTodo.find(el => el.id === todoId)
+      todo.isFavorite = true
     }
   },
   created(){
+    if (!getItem("favorites")){
+      setItem("favorites", [])
+    }
     this.initTodo()
     this.idOptions = this.users.map(user => user.id)
   }
