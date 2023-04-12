@@ -23,7 +23,7 @@ export default {
       setItem("isLoggedIn", true)
     }
   },
-  created(){
+  beforeCreate(){
     setItem("isLoggedIn", false)
   }
 }

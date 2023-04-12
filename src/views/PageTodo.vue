@@ -95,7 +95,7 @@
 
                 <v-icon
                   v-else
-                  color="yellow darken-3"
+                  color="grey lighten-1"
                 >
                   mdi-star
                 </v-icon>

@@ -32,16 +32,20 @@ const router = new VueRouter({
   routes
 })
 router.beforeEach((to, from, next) => {
-  const isLoggedIn = getItem("isLoggedIn")
+  let isLoggedIn;
   if (!to.meta.needAuth) {
     next()
   } else {
-    if (isLoggedIn){
-      next()
-    } else {
-      next({name: "login"})
-    }
+    Vue.nextTick(() => {
+      isLoggedIn = getItem("isLoggedIn")
+      if (isLoggedIn){
+        next()
+      } else {
+        next({name: "login"})
+      }
+    })
   }
+
 })
 
 export default router
