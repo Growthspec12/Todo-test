@@ -50,7 +50,7 @@ body {
   }
 
   &__button{
-    color: $white;
+    color: $white !important;
     background-color: $green;
     outline: none;
     border: none;

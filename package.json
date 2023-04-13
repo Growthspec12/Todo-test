@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "lint": "eslint src --ext .js --ext .vue",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build"
   },
@@ -15,6 +16,8 @@
   "devDependencies": {
     "@mdi/font": "^7.2.96",
     "@vue/cli-service": "~5.0.0",
+    "eslint": "^8.38.0",
+    "eslint-plugin-vue": "^9.10.0",
     "sass": "^1.32.7",
     "sass-loader": "^12.6.0",
     "vue-cli-plugin-vuetify": "~2.5.8",

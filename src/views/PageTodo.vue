@@ -1,17 +1,30 @@
 <template>
   <div class="page-container">
-    <header class="header ma-xl-1">
+    <header class="header">
       <nav class="navbar">
-        <h1 class="navbar__heading">{{ user.name }}</h1>
+        <h1 class="navbar__heading">
+          {{ user.name }}
+        </h1>
         <ul class="navbar__list">
-          <li class="navbar__li">{{ user.address.city }}</li>
-          <li class="navbar__li">{{ user.phone }}</li>
-          <li class="navbar__li">{{ user.company.name }}</li>
-          <li class="navbar__li">{{ user.email }}</li>
+          <li class="navbar__li">
+            {{ user.address.city }}
+          </li>
+          <li class="navbar__li">
+            {{ user.phone }}
+          </li>
+          <li class="navbar__li">
+            {{ user.company.name }}
+          </li>
+          <li class="navbar__li">
+            {{ user.email }}
+          </li>
         </ul>
       </nav>
     </header>
-    <div class="input-bar" data-app>
+    <div
+      class="input-bar"
+      data-app
+    >
       <div class="input-bar__item">
         <v-select
           v-model="selectedStatusOptions"
@@ -20,7 +33,7 @@
           :dark="true"
           multiple
         >
-          <template v-slot:prepend-item>
+          <template #prepend-item>
             <v-list-item
               ripple
               @mousedown.prevent
@@ -43,7 +56,7 @@
           :dark="true"
           multiple
         >
-          <template v-slot:prepend-item>
+          <template #prepend-item>
             <v-list-item
               ripple
               @mousedown.prevent
@@ -59,7 +72,12 @@
         </v-select>
       </div>
       <div class="input-bar__item">
-          <input type="text" class="form__input form__input_item" placeholder="Filter by title" v-model="titleInput">
+        <input
+          v-model="titleInput"
+          type="text"
+          class="form__input form__input_item"
+          placeholder="Filter by title"
+        >
       </div>
     </div>
     <div class="todos">
@@ -70,13 +88,16 @@
           flat
         >
           <v-list-item-group multiple>
-            <v-list-item v-for="todo in filteredTodo" :key="todo.id">
+            <v-list-item
+              v-for="todo in filteredTodo"
+              :key="todo.id"
+            >
               <v-list-item-action>
                 <v-checkbox
                   :input-value="todo.completed"
-                  @click="changeStatus(todo.id)"
                   color="primary"
-                ></v-checkbox>
+                  @click="changeStatus(todo.id)"
+                />
               </v-list-item-action>
 
               <v-list-item-content>
@@ -97,7 +118,6 @@
                 >
                   mdi-star
                 </v-icon>
-
               </v-list-item-action>
             </v-list-item>
           </v-list-item-group>
@@ -107,10 +127,28 @@
 
     <div class="create-todo">
       <div class="wrapper">
-        <form class="form" @submit.prevent="addTodo">
-          <input type="number" class="form__input" placeholder="Enter user ID" v-model="userIdInput">
-          <input type="text" class="form__input" placeholder="Enter todo title" v-model="todoTitleInput">
-          <button type="submit" class="form__button">Add todo</button>
+        <form
+          class="form"
+          @submit.prevent="addTodo"
+        >
+          <input
+            v-model="userIdInput"
+            type="number"
+            class="form__input"
+            placeholder="Enter user ID"
+          >
+          <input
+            v-model="todoTitleInput"
+            type="text"
+            class="form__input"
+            placeholder="Enter todo title"
+          >
+          <button
+            type="submit"
+            class="form__button"
+          >
+            Add todo
+          </button>
         </form>
       </div>
     </div>
@@ -136,34 +174,33 @@ export default {
   data(){
     return {
       statusOptions: [
-        'Selected',
-        'Unselected',
-        'Favorites',
+        "Selected",
+        "Unselected",
+        "Favorites",
       ],
       idOptions: [],
       selectedStatusOptions: [],
       selectedIdOptions: [],
       allTodo: [],
-      filteredTodo: [],
       titleInput: "",
       userIdInput: "",
       todoTitleInput: ""
-    }
+    };
   },
   computed: {
     isAllStatusOptions () {
-      return this.selectedStatusOptions.length === this.statusOptions.length
+      return this.selectedStatusOptions.length === this.statusOptions.length;
     },
     isAllIdOptions () {
-      return this.selectedIdOptions.length === this.idOptions.length
+      return this.selectedIdOptions.length === this.idOptions.length;
     },
-    filterTodo(){
+    filteredTodo(){
       return this.allTodo.filter(todo => {
         let statusFilter = false;
         let userFilter = false;
         let inputMatch = false;
 
-        if (this.selectedStatusOptions.length === 0 || this.selectedStatusOptions.includes('Selected') && todo.completed || this.selectedStatusOptions.includes('Unselected') && !todo.completed || this.selectedStatusOptions.includes('Favorites') && todo.isFavorite) {
+        if (this.selectedStatusOptions.length === 0 || this.selectedStatusOptions.includes("Selected") && todo.completed || this.selectedStatusOptions.includes("Unselected") && !todo.completed || this.selectedStatusOptions.includes("Favorites") && todo.isFavorite) {
           statusFilter = true;
         }
 
@@ -179,50 +216,39 @@ export default {
       });
     }
   },
-  watch: {
-    selectedStatusOptions(){
-      this.filteredTodo = this.filterTodo
-    },
-    selectedIdOptions(){
-      this.filteredTodo = this.filterTodo
-    },
-    titleInput(){
-      this.filteredTodo = this.filterTodo
-    },
-    allTodo: {
-      handler(){
-        this.filteredTodo = this.filterTodo
-      },
-      deep: true
+  created(){
+    if (!getItem("favorites")){
+      setItem("favorites", []);
     }
+    this.initTodo();
+    this.idOptions = this.users.map(user => user.id);
   },
   methods: {
     async initTodo(){
       try {
-        const favorites = getItem("favorites")
+        const favorites = getItem("favorites");
         const response = await getTodos();
         this.allTodo = await response.json();
         this.allTodo = this.allTodo.map(todo => {
-          return {...todo, isFavorite: favorites.includes(todo.id)}
-        })
-        this.filteredTodo = this.allTodo
+          return {...todo, isFavorite: favorites.includes(todo.id)};
+        });
       } catch {
-        console.log("Can't load todo data")
+        console.log("Can't load todo data");
       }
     },
     toggleAllStatus () {
       if (this.isAllStatusOptions){
-        this.selectedStatusOptions = []
+        this.selectedStatusOptions = [];
         return;
       }
       this.selectedStatusOptions = this.statusOptions;
     },
     toggleAllId () {
       if (this.isAllIdOptions){
-        this.selectedIdOptions = []
+        this.selectedIdOptions = [];
         return;
       }
-      this.selectedIdOptions = this.idOptions
+      this.selectedIdOptions = this.idOptions;
     },
     async addTodo(){
       try {
@@ -233,40 +259,33 @@ export default {
         if (response.ok){
           this.allTodo.push({
             id: new Date().toISOString(),
-            userId: this.userIdInput,
+            userId: Number(this.userIdInput),
             title: this.todoTitleInput,
             completed: false,
             isFavorite: false
-          })
+          });
           const isOld = this.idOptions.some(id => id === Number(this.userIdInput));
           !isOld && this.idOptions.push(Number(this.userIdInput));
-          this.userIdInput = ""
-          this.todoTitleInput = ""
+          this.userIdInput = "";
+          this.todoTitleInput = "";
         }
       } catch {
-        console.log("Can't create todo")
+        console.log("Can't create todo");
       }
     },
     addToFavorites(todoId){
-      const favorites = getItem("favorites")
+      const favorites = getItem("favorites");
       favorites.push(todoId);
-      setItem("favorites", favorites)
-      const todo = this.allTodo.find(el => el.id === todoId)
-      todo.isFavorite = !todo.isFavorite
+      setItem("favorites", favorites);
+      const todo = this.allTodo.find(el => el.id === todoId);
+      todo.isFavorite = !todo.isFavorite;
     },
     changeStatus(todoId){
-      const todo = this.allTodo.find(el => el.id === todoId)
-      todo.completed = !todo.completed
+      const todo = this.allTodo.find(el => el.id === todoId);
+      todo.completed = !todo.completed;
     }
-  },
-  created(){
-    if (!getItem("favorites")){
-      setItem("favorites", [])
-    }
-    this.initTodo()
-    this.idOptions = this.users.map(user => user.id)
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

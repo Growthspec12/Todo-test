@@ -1,6 +1,10 @@
 <template>
   <div class="wrapper">
-    <router-view @login-success="onLoginSuccess" :user="userData" :users="allUsers"></router-view>
+    <router-view
+      :user="userData"
+      :users="allUsers"
+      @login-success="onLoginSuccess"
+    />
   </div>
 </template>
 
@@ -9,24 +13,24 @@
 import { setItem } from "@/helper/storage";
 
 export default {
-  name: 'App',
+  name: "App",
   data(){
     return{
       userData: {},
       allUsers: []
-    }
+    };
+  },
+  beforeCreate(){
+    setItem("isLoggedIn", false);
   },
   methods: {
     onLoginSuccess(user, users){
-      this.userData = user
-      this.allUsers = users
-      setItem("isLoggedIn", true)
+      this.userData = user;
+      this.allUsers = users;
+      setItem("isLoggedIn", true);
     }
-  },
-  beforeCreate(){
-    setItem("isLoggedIn", false)
   }
-}
+};
 </script>
 
 <style lang="scss">

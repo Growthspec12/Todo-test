@@ -4,7 +4,7 @@ import PageLogin from "@/views/PageLogin";
 import PageTodo from "@/views/PageTodo";
 import {getItem} from "@/helper/storage";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
@@ -25,27 +25,27 @@ const routes = [
       needAuth: true
     }
   }
-]
+];
 
 const router = new VueRouter({
   mode: "history",
   routes
-})
+});
 router.beforeEach((to, from, next) => {
   let isLoggedIn;
   if (!to.meta.needAuth) {
-    next()
+    next();
   } else {
     Vue.nextTick(() => {
-      isLoggedIn = getItem("isLoggedIn")
+      isLoggedIn = getItem("isLoggedIn");
       if (isLoggedIn){
-        next()
+        next();
       } else {
-        next({name: "login"})
+        next({name: "login"});
       }
-    })
+    });
   }
 
-})
+});
 
-export default router
+export default router;
